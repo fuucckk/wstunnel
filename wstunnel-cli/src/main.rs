@@ -8,6 +8,13 @@ use wstunnel::config::{Client, Server};
 use wstunnel::LocalProtocol;
 use wstunnel::{run_client, run_server};
 
+#[cfg(not(any(target_env = "msvc", target_arch = "arm", target_arch = "x86")))]
+use tikv_jemallocator::Jemalloc;
+
+#[cfg(not(any(target_env = "msvc", target_arch = "arm", target_arch = "x86")))]
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
+
 /// Use Websocket or HTTP2 protocol to tunnel {TCP,UDP} traffic
 /// wsTunnelClient <---> wsTunnelServer <---> RemoteHost
 #[derive(clap::Parser, Debug)]
@@ -50,6 +57,7 @@ pub enum Commands {
     Client(Box<Client>),
     Server(Box<Server>),
 }
+
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

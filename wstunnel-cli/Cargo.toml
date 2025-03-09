@@ -12,6 +12,9 @@ tracing = { version = "0.1.41", features = ["log"] }
 tracing-subscriber = { version = "0.3.19", features = ["env-filter", "fmt", "local-time"] }
 wstunnel = { path = ".." , features = ["clap"] }
 
+[target.'cfg(not(any(target_env = "msvc", target_arch = "arm", target_arch = "x86")))'.dependencies]
+tikv-jemallocator = "0.6"
+
 [[bin]]
 name = "wstunnel"
 path = "src/main.rs"
